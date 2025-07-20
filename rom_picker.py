@@ -56,9 +56,9 @@ def create_roms_folder():
 def configure_program():
     choices = {}
     use_chd = input("Do you want to use CHDs when possible ? (Y/N)")
-    choices["ENG"]  = ("y" == input("Do you allow english games ? (Y/N)") )
-    choices["JAP"]  = ("y" == input("Do you allow japanese games ? (Y/N)") )
-    choices["OTHER"]  = ("y" == input("Do you allow games in other languages ? (Y/N)") )
+    choices["ENG"]  = ("y" == input("Do you allow english games ? (Y/N)").lower() )
+    choices["JAP"]  = ("y" == input("Do you allow japanese games ? (Y/N)").lower() )
+    choices["OTHER"]  = ("y" == input("Do you allow games in other languages ? (Y/N)").lower() )
     i = 0
     for console in console_list:
         if ("CHD" in console and use_chd.lower() == "n") or ("CUE" in console and use_chd.lower() == "y"):
