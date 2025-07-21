@@ -31,7 +31,11 @@ It is possible to provide the program with your own custom ROM list, as long as 
     {"title": "Game 2 (Japan)", "link": "https://example.com/Game2.zip", "language": "JAP"},
     ...
     {"title": "Game X (Germany)", "link": "https://example.com/GameX.zip", "language": "OTHER"}
-            ]
+            ],
+ ...
+ "Console Y": [
+    ...
+ ]
 }
 ```
 
