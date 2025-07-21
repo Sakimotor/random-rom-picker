@@ -15,6 +15,8 @@ You can automatically install said modules by running `pip install -r requiremen
 
 ## Usage
 
+After cloning/downloading the repo, you can run the program with the command `python rom_picker.py`.
+
 When launching the program, you will be asked if you want to reconfigure your settings (add/remove potential languages/consoles), which would automatically modify the configuration file located at `cfg/user_config.json` through a series of questions.
 
 Once the configuration is finished, a random ROM will be picked from the list stored at `res/roms.json`. During the configuration process, said list can be updated with the latest links found on Myrient's Website.
