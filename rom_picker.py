@@ -4,6 +4,7 @@ import random
 import os
 import requests
 import werkzeug
+from lib.myrient_to_json import update_roms_json
 from tqdm import tqdm
 
 #from https://gist.github.com/phineas-pta/d73f9a035b05f8e923af8c01df057175
@@ -54,7 +55,11 @@ def create_roms_folder():
 
 
 def configure_program():
+    os.mkdir("cfg")
     choices = {}
+    if "y" == input("Do you want to update the roms list ? (Y/N)").lower():
+        update_roms_json()
+        
     use_chd = input("Do you want to use CHDs when possible ? (Y/N)")
     choices["ENG"]  = ("y" == input("Do you allow english games ? (Y/N)").lower() )
     choices["JAP"]  = ("y" == input("Do you allow japanese games ? (Y/N)").lower() )
@@ -70,7 +75,7 @@ def configure_program():
                     
         i += 1
     
-    with open("user_config.json", "w", encoding='utf-8') as json_file:
+    with open("cfg/user_config.json", "w", encoding='utf-8') as json_file:
         json.dump(choices, json_file, ensure_ascii=False, indent=4)
     
     
@@ -79,7 +84,7 @@ def pick_random_game():
     game_found = False
     with open('res/roms.json', 'r', encoding='utf-8') as roms_file:
         romlist = json.load(roms_file)
-        with open('user_config.json', 'r', encoding='utf-8') as config_file:
+        with open('cfg/user_config.json', 'r', encoding='utf-8') as config_file:
             pool_cur = json.load(config_file)
             pool_filtered = {k: v for k, v in pool_cur.items() if v} #we filter out the consoles that are set to False
             random_console = random.choice(list(pool_filtered.keys())) #we need to transform the dict into a list for it to work with random.choice()
@@ -94,7 +99,7 @@ def pick_random_game():
 
 
 def main():
-    if os.path.exists("user_config.json"):
+    if os.path.exists("cfg/user_config.json"):
         reconfig = input("Run the configurator again ? (Y/N)")
         if reconfig.lower() == "y":
             configure_program()
