@@ -96,4 +96,4 @@ Finally, it is possible to modify the user configuration file at `cfg/user_confi
 
 ## TODO
 
-[ ] Add support for MAME and Final Burn NEO ROMs, which will require checking a ROM's dependancy with system files, and other ROMs (common with a game's upgraded/localized version).
+- [ ] Add support for MAME and Final Burn NEO ROMs, which will require checking a ROM's dependancy with system files, and other ROMs (common with a game's upgraded/localized version).
