@@ -49,7 +49,8 @@ console_list = list(Console)
 
 def create_roms_folder():
     for console in console_list:
-        os.makedirs('roms/' + console)
+        if not os.path.exists('roms/' + console):
+            os.makedirs('roms/' + console)
 
 
 
@@ -88,16 +89,17 @@ def pick_random_game():
             pool_cur = json.load(config_file)
             pool_filtered = {k: v for k, v in pool_cur.items() if v} #we filter out the consoles that are set to False
             random_console = random.choice(list(pool_filtered.keys())) #we need to transform the dict into a list for it to work with random.choice()
-            result = random.choice(romlist[random_console])
+            if random_console == Console.FB:
+                with open('res/fbneo_roms.json', 'r', encoding='utf-8') as fbneo_file:
+                    romlist_fbneo = json.load(fbneo_file)
+                    pick_current = random.choice(list(romlist_fbneo.keys()))
+                    game_current = romlist_fbneo[pick_current]
+                    result = dict(title=pick_current, reqs=game_current['require'] if 'require' in game_current else None, link=game_current['download'])
+            else:
+                result = random.choice(romlist[random_console])
             result['console'] = random_console
             return result
             
-            
-        
-        
-    
-
-
 def main():
     if os.path.exists("cfg/user_config.json"):
         reconfig = input("Run the configurator again ? (Y/N)")
@@ -108,8 +110,18 @@ def main():
     
     res = pick_random_game()
     print(f"Today's ROM will be {res['title']} on the {res['console']}!")
-    os.makedirs('roms/' + res['console'])
-    download(res['link'],'roms/' + res['console'] + '/' + res['title'] + ('.chd' if "CHD" in res['console'] else '.zip'))
+    if not os.path.exists('roms/' + res['console']):
+        os.makedirs('roms/' + res['console'])
+    if res['console'] == Console.FB:
+        with open('res/fbneo_roms.json', 'r', encoding='utf-8') as fbneo_file:
+            romlist_fbneo = json.load(fbneo_file)
+            for req_title in res['reqs']:
+                req_cur = romlist_fbneo[req_title]
+                download(req_cur['download'], 'roms/' + res['console'] + '/' + req_title + '.zip')
+            download(res['link'], 'roms/' + res['console'] + '/' + res['title'] + '.zip')
+                
+    else:
+        download(res['link'],'roms/' + res['console'] + '/' + res['title'] + ('.chd' if "CHD" in res['console'] else '.zip'))
     
 
 
