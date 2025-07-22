@@ -59,4 +59,3 @@ class Console(StrEnum):
     FMT = 'FMTowns'  
     
     FB = 'Final Burn NEO'
-    MAME = 'MAME'

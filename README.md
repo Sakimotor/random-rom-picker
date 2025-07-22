@@ -91,12 +91,11 @@ Finally, it is possible to modify the user configuration file at `cfg/user_confi
     "Sharp X68000": true,
     "Commodore Amiga": true,
     "FMTowns": true,
-    "Final Burn NEO": true,
-    "MAME": true
+    "Final Burn NEO": true
 }
 ```
 
 ## TODO
 
-- [ ] Add support for MAME and Final Burn NEO ROMs, which will require checking a ROM's dependancy with system files, and other ROMs (common with a game's upgraded/localized version).
+- [X] Add support for Final Burn NEO ROMs, which will require checking a ROM's dependancy with system files, and other ROMs (common with a game's upgraded/localized version).
 - [ ] Potentially auto-download emulators and BIOS files.
