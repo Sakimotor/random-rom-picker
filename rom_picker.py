@@ -102,12 +102,10 @@ def pick_random_game():
             
 
 def download_fbrom_and_reqs(res, romlist_fbneo):
-    print(f"res: {res}")
     reqs_cur = res['reqs']
     if reqs_cur is not None:
         for req_title in reqs_cur:
             req_cur = romlist_fbneo[req_title]
-            print(f"req: {req_cur}")
             res_next = dict(title=req_title, reqs= (req_cur['require'] if 'require' in req_cur  else None), link=req_cur['download'])
             download_fbrom_and_reqs(res_next, romlist_fbneo)
     download(res['link'], 'roms/' + Console.FB + '/' + res['title'] + '.zip')       
