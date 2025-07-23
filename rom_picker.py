@@ -56,8 +56,10 @@ def create_roms_folder():
 
 
 def configure_program():
-    os.mkdir("cfg")
+    if not os.path.exists("cfg"):
+        os.mkdir("cfg")
     choices = {}
+    all_choices = {}
     if "y" == input("Do you want to update the roms list ? (Y/N)").lower():
         update_roms_json()
         
@@ -65,6 +67,8 @@ def configure_program():
     choices["ENG"]  = ("y" == input("Do you allow english games ? (Y/N)").lower() )
     choices["JAP"]  = ("y" == input("Do you allow japanese games ? (Y/N)").lower() )
     choices["OTHER"]  = ("y" == input("Do you allow games in other languages ? (Y/N)").lower() )
+    all_choices["languages"] = choices
+    choices = {}
     i = 0
     for console in console_list:
         if ("CHD" in console and use_chd.lower() == "n") or ("CUE" in console and use_chd.lower() == "y"):
@@ -75,9 +79,9 @@ def configure_program():
             choices[console] = True
                     
         i += 1
-    
+    all_choices["consoles"] = choices
     with open("cfg/user_config.json", "w", encoding='utf-8') as json_file:
-        json.dump(choices, json_file, ensure_ascii=False, indent=4)
+        json.dump(all_choices, json_file, ensure_ascii=False, indent=4)
     
     
     
@@ -87,7 +91,11 @@ def pick_random_game():
         romlist = json.load(roms_file)
         with open('cfg/user_config.json', 'r', encoding='utf-8') as config_file:
             pool_cur = json.load(config_file)
+            print(pool_cur)
+            languages_cur = pool_cur["languages"]
+            pool_cur = pool_cur["consoles"]            
             pool_filtered = {k: v for k, v in pool_cur.items() if v} #we filter out the consoles that are set to False
+            languages_filtered = {k: v for k, v in languages_cur.items() if v}
             random_console = random.choice(list(pool_filtered.keys())) #we need to transform the dict into a list for it to work with random.choice()
             if random_console == Console.FB:
                 with open('res/fbneo_roms.json', 'r', encoding='utf-8') as fbneo_file:
@@ -97,6 +105,8 @@ def pick_random_game():
                     result = dict(title=pick_current, reqs=game_current['require'] if 'require' in game_current else None, link=game_current['download'])
             else:
                 result = random.choice(romlist[random_console])
+                while result["language"] not in languages_filtered:
+                    result = random.choice(romlist[random_console])
             result['console'] = random_console
             return result
             

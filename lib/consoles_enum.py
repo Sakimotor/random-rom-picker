@@ -16,18 +16,18 @@ class Console(StrEnum):
 
     
     MD = 'Mega Drive'
-    MCD_CUE = 'SegaCD (BIN/CUE)'
+    MCD_CUE = 'SegaCD (CUE)'
     MCD_CHD = 'SegaCD (CHD)'
     S32X = 'Sega 32X'
     SNES = 'Super NES'
     
-    PS1_CUE = 'PlayStation 1 (BIN/CUE)'
+    PS1_CUE = 'PlayStation 1 (CUE)'
     PS1_CHD = 'PS1 (CHD)'
-    SAT_CUE = 'Sega Saturn (BIN/CUE)'
+    SAT_CUE = 'Sega Saturn (CUE)'
     SAT_CHD = 'Saturn (CHD)'
     N64 = 'Nintendo 64'
     N64DD = 'Nintendo 64DD'
-    DC_CUE = 'Dreamcast (BIN/CUE)'
+    DC_CUE = 'Dreamcast (CUE)'
     DC_CHD = 'Dreamcast (CHD)'
     
     
