@@ -1,6 +1,6 @@
 # Random ROM Picker
 
-Small program that selects and downloads a random ROM from [Myrient's Database](https://myrient.erista.me/files/). The user can select which consoles and languages the potential downloaded game can be one.
+Small program that selects and downloads a random ROM from [minerva's Database](https://minerva.erista.me/files/). The user can select which consoles and languages the potential downloaded game can be one.
 
 **Note:** for Final Burn NEO titles, the romset is taken from [lofi1048's FightCade 2 JSON Pack](https://lofi.netlify.app/post/fc2-json-pack-auto-download-roms-from-fightcade-2/)
 
@@ -21,7 +21,7 @@ After cloning/downloading the repo, you can run the program with the command `py
 
 When launching the program, you will be asked if you want to reconfigure your settings (add/remove potential languages/consoles), which would automatically modify the configuration file located at `cfg/user_config.json` through a series of questions.
 
-Once the configuration is finished, a random ROM will be picked from the list stored at `res/roms.json`. During the configuration process, said list can be updated with the latest links found on Myrient's Website.
+Once the configuration is finished, a random ROM will be picked from the list stored at `res/roms.json`. During the configuration process, said list can be updated with the latest links found on minerva's Website.
 
 ## Extra
 
@@ -41,7 +41,7 @@ It is possible to provide the program with your own custom ROM list, as long as 
 }
 ```
 
-You can also modify the behavior of the link crawler inside of `lib/myrient_to_json.py` function to automatically generate a JSON from a source of yours.
+You can also modify the behavior of the link crawler inside of `lib/minerva_to_json.py` function to automatically generate a JSON from a source of yours.
 
 Finally, it is possible to modify the user configuration file at `cfg/user_config.json` by hand by setting as `true` the consoles/languages you want to keep, and `false` the rest.
 

@@ -12,9 +12,7 @@ class Console(StrEnum):
     LYNX = 'Atari Lynx'
     WS = 'WonderSwan'
     WSC = 'WonderSwan Color'
-    
-
-    
+        
     MD = 'Mega Drive'
     MCD_CUE = 'SegaCD (CUE)'
     MCD_CHD = 'SegaCD (CHD)'
@@ -29,8 +27,7 @@ class Console(StrEnum):
     N64DD = 'Nintendo 64DD'
     DC_CUE = 'Dreamcast (CUE)'
     DC_CHD = 'Dreamcast (CHD)'
-    
-    
+       
     
     PS2 = 'PlayStation 2'
     PSP = 'PlayStation Portable'
@@ -59,3 +56,6 @@ class Console(StrEnum):
     FMT = 'FMTowns'  
     
     FB = 'Final Burn NEO'
+
+    PC = 'PC Abandonware'
+    DOS = 'DOS Abandonware'    

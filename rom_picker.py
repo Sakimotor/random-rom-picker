@@ -4,7 +4,11 @@ import random
 import os
 import requests
 import werkzeug
-from lib.myrient_to_json import update_roms_json
+import argparse
+from lib.minerva_to_json import update_roms_json
+from lib.myabandonware_to_json import update_myabandonware_json
+from lib.abfrance_to_json import update_abfrance_json
+from lib.doujinstyle_to_json import update_doujinstyle_json
 from tqdm import tqdm
 
 #from https://gist.github.com/phineas-pta/d73f9a035b05f8e923af8c01df057175
@@ -15,7 +19,7 @@ def download(url:str, filename:str="", overwrite:bool=False, chunk_size:int=1) -
     chunk_size in MBytes
     """
     HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
-               "Referer": "https://myrient.erista.me/"}  # some sites block if u dont have at least user agent
+               "Referer": "https://minerva.erista.me/"}  # some sites block if u dont have at least user agent
     with requests.get(url, headers=HEADERS, stream=True) as resp:
 
         # get file name
@@ -63,13 +67,13 @@ def configure_program():
     lang_choices = {}
     console_choices = {}
     all_choices = {}
-    if "y" == input("Do you want to update the roms list ? (Y/N)").lower():
-        update_roms_json()
         
     use_chd = input("Do you want to use CHDs when possible ? (Y/N)")
     lang_choices["ENG"]  = ("y" == input("Do you allow english games ? (Y/N)").lower() )
     lang_choices["JAP"]  = ("y" == input("Do you allow japanese games ? (Y/N)").lower() )
     lang_choices["OTHER"]  = ("y" == input("Do you allow games in other languages ? (Y/N)").lower() )
+    lang_choices["ABND"] = True
+    lang_choices["DOUJIN"] = True
     all_choices["languages"] = lang_choices
     i = 0
     for console in console_list:
@@ -101,13 +105,14 @@ def pick_random_game(console:Console=None):
 
                 
             
-            
+            print(f"current console: {console_cur}")
             if console_cur == Console.FB:
                 with open('res/fbneo_roms.json', 'r', encoding='utf-8') as fbneo_file:
                     romlist_fbneo = json.load(fbneo_file)
                     pick_current = random.choice(list(romlist_fbneo.keys()))
                     game_current = romlist_fbneo[pick_current]
                     result = dict(title=pick_current, reqs=game_current['require'] if 'require' in game_current else None, link=game_current['download'])
+            
             else:
                 result = random.choice(romlist[console_cur])
                 if console is None:
@@ -131,39 +136,69 @@ def download_fbrom_and_reqs(res, romlist_fbneo):
                 
 
 def main():
+    parser = argparse.ArgumentParser(
+                    prog='ROM/Game Picker',
+                    description='Picks a random game and downloads it by default')
+    
+    parser.add_argument('-nodl', '--no-download', nargs='*')
+    parser.add_argument('-noconf', '--no-config', nargs='*')
+
+    args = parser.parse_args()
+
+
+    print(args)
+
+    res = None
+
+
+
+
     if os.path.exists("cfg/user_config.json"):
-        reconfig = input("Run the configurator again ? (Y/N)")
-        if reconfig.lower() == "y":
-            configure_program()
+        if args.no_config is None:
+            reconfig = input("Run the configurator again ? (Y/N)")
+            if reconfig.lower() == "y":
+                configure_program()
     else:
         configure_program()
-    res = None
-    if "y" in (input("Pick one specific console ? (Y/N)").lower()):
-        picked_console = None
-        i = 1
-        for console in console_list:
-            print(f"{i} - {console}")
-            i += 1
-        console_input = int(input("Enter the number of the console you want to play:"))
-        if console_input > len(console_list) or console_input < 1:
+    
+    if args.no_config is None:
+        if "y" == input("Do you want to update the roms list ? (Y/N)").lower():
+            update_roms_json() #commented out until I find a minerva replacement, EDIT: minerva is up and running
+            update_myabandonware_json() #takes too loooong
+            update_abfrance_json()
+            update_doujinstyle_json()
+
+    
+        if "y" in (input("Pick one specific console ? (Y/N)").lower()):
             picked_console = None
+            i = 1
+            for console in console_list:
+                print(f"{i} - {console}")
+                i += 1
+            console_input = int(input("Enter the number of the console you want to play:"))
+            if console_input > len(console_list) or console_input < 1:
+                picked_console = None
+            else:
+                picked_console = console_list[console_input - 1]
+            res = pick_random_game(picked_console)
+            
         else:
-            picked_console = console_list[console_input - 1]
-        res = pick_random_game(picked_console)
-        
+            res = pick_random_game()
     else:
         res = pick_random_game()
     print(f"Today's ROM will be {res['title']} on the {res['console']}!")
-    print(res)
-    if not os.path.exists('roms/' + res['console']):
-        os.makedirs('roms/' + res['console'])
-    if res['console'] == Console.FB:
-        with open('res/fbneo_roms.json', 'r', encoding='utf-8') as fbneo_file:
-            romlist_fbneo = json.load(fbneo_file)
-            download_fbrom_and_reqs(res, romlist_fbneo)
-                
-    else:
-        download(res['link'],'roms/' + res['console'] + '/' + res['title'] + ('.chd' if "CHD" in res['console'] else '.zip'))
+    
+    if args.no_download is None:
+        print(res)
+        if not os.path.exists('roms/' + res['console']):
+            os.makedirs('roms/' + res['console'])
+        if res['console'] == Console.FB:
+            with open('res/fbneo_roms.json', 'r', encoding='utf-8') as fbneo_file:
+                romlist_fbneo = json.load(fbneo_file)
+                download_fbrom_and_reqs(res, romlist_fbneo)
+                    
+        else:
+            download(res['link'],'roms/' + res['console'] + '/' + res['title'] + ('.chd' if "CHD" in res['console'] else '.zip'))
     
 
 
