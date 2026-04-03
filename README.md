@@ -1,6 +1,16 @@
 # Random ROM Picker
 
-Small program that selects and downloads a random ROM from [minerva's Database](https://minerva.erista.me/files/). The user can select which consoles and languages the potential downloaded game can be one.
+Small program that selects and downloads a random ROM from [minerva's Database](https://minerva.erista.me/files/). The user can select which consoles and languages the potential downloaded game can be one. **TODO**: rewrite it to auto-download the torrents.
+
+Supported websites:
+
+- Minerva
+- MyAbandonware
+- Final Burn NEO
+- Abandonware-France
+- DoujinStyle
+
+Can also (and mostly) serve as a mere game picker (without any download). 
 
 **Note:** for Final Burn NEO titles, the romset is taken from [lofi1048's FightCade 2 JSON Pack](https://lofi.netlify.app/post/fc2-json-pack-auto-download-roms-from-fightcade-2/)
 
